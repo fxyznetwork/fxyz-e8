@@ -26,7 +26,7 @@
  *   1.902   √((1/2)(1 + √5))    30
  *   2       2                   24   (outer H4Φ 24-cell echo)
  *
- * For the landing renderer we need:
+ * A typical GPU consumer needs:
  *   1. Group the 240 `posFold3D` vertices by radius into 8 buckets.
  *   2. For each bucket with N ≥ 2 vertices, compute the convex-hull edge
  *      skeleton — pairs of vertices at the minimum within-shell distance.

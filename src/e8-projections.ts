@@ -2,13 +2,16 @@
  * E8 Projection Methods - Multiple Projection Bases
  *
  * Provides different 2D and 3D projections of 8D E8 root vectors:
- * - Platonic 3D: Moxness basis revealing concentric shells (existing, now canonical)
- * - Petrie 2D: Coxeter eigenplane projection (the "mandala")
- * - Van Oss 2D: Alternative 2D projection
+ * - Platonic 3D: Moxness basis revealing concentric shells (existing, canonical)
+ * - `projectPetrie2D`: a fixed orthonormal 2D projection (see the caveat below)
  *
- * The Petrie projection uses eigenvectors of the Coxeter element, producing
- * 48 distinct radii grouped visually into 8 clusters via k-means.
- * See E8-AUDIT-REPORT.md for mathematical derivation.
+ * `projectPetrie2D` uses the fixed `PETRIE_BASIS` from e8-constants.ts. Despite
+ * its historical name, that basis is NOT the Coxeter eigenplane and does not
+ * exhibit the 30-fold symmetry of a true Petrie/Coxeter-plane projection (an
+ * empirical rotation test finds only the trivial 2-fold centrosymmetry); it
+ * produces 48 distinct radii. The genuine, verified Coxeter-plane mandala
+ * (8 concentric shells of 30, exact 30-fold symmetry) lives in
+ * `e8-coxeter-plane.ts` as `projectCoxeterPlane2D` / `COXETER_PLANE_BASIS`.
  *
  * ZERO Three.js dependency - pure linear algebra.
  */
@@ -57,14 +60,14 @@ export function projectAllPlatonic3D(
 // ---------------------------------------------------------------------------
 
 /**
- * Project a single 8D vector to 2D using the Petrie/Coxeter eigenplane basis.
+ * Project a single 8D vector to 2D using the fixed orthonormal `PETRIE_BASIS`.
  *
- * This produces the famous mandala view with 8 visual concentric rings.
- * The basis vectors are the m=1 eigenvectors of the E8 Coxeter element,
- * computed by solving (C² - 2cos(2π/30)C + I)v = 0.
- *
- * The projection produces 48 distinct radii, grouped into 8 visual
- * clusters by k-means. See e8-constants.ts for basis derivation.
+ * NOTE: despite the "Petrie" name this is NOT the Coxeter-plane projection — the
+ * projected 240-root set shows only the trivial 2-fold centrosymmetry, not the
+ * 30-fold symmetry of a true Petrie/Coxeter-plane mandala, and yields 48
+ * distinct radii (see the `PETRIE_BASIS` caveat in e8-constants.ts). Retained
+ * for back-compat. For the verified 30-fold mandala use `projectCoxeterPlane2D`
+ * from `e8-coxeter-plane.ts`.
  */
 export function projectPetrie2D(v8D: number[]): [number, number] {
 	return [dot8(v8D, PETRIE_BASIS.u1), dot8(v8D, PETRIE_BASIS.u2)];
@@ -78,15 +81,16 @@ export function projectAllPetrie2D(vertices8D: number[][]): [number, number][] {
 }
 
 /**
- * Classify Petrie-projected vertices into 8 visual ring clusters (0-7).
+ * Classify `projectPetrie2D`-projected vertices into 8 visual ring clusters (0-7).
  *
- * The Petrie projection of 240 E8 roots produces 48 distinct 2D radii.
- * These are grouped into 8 visual clusters using 1D k-means on the radii.
- * Ring 0 = innermost, ring 7 = outermost.
+ * The fixed `PETRIE_BASIS` projection of the 240 E8 roots produces 48 distinct
+ * 2D radii. This routine groups them into 8 visual clusters via 1D k-means on
+ * the radii (ring 0 = innermost, ring 7 = outermost); the clusters are a
+ * rendering convenience, not a structural 8×30 split.
  *
- * Note: the popular claim of "8 rings of exactly 30 vertices each" is a
- * simplification. The true Coxeter eigenplane projection has unequal cluster
- * sizes. See E8-AUDIT-REPORT.md for mathematical proof.
+ * Contrast the genuine Coxeter-plane projection (`projectCoxeterPlane2D` +
+ * `classifyCoxeterShells`, `e8-coxeter-plane.ts`), where the 240 roots land on
+ * EXACTLY 8 radii of 30 points each — an exact partition, no k-means needed.
  *
  * Returns an array of ring indices (0-7) corresponding to input vertices.
  */
@@ -168,8 +172,11 @@ export interface PetrieVertex {
 }
 
 /**
- * Generate the complete Petrie mandala: 240 vertices projected to 2D
- * with ring classification (8 visual clusters via k-means).
+ * Generate the legacy `projectPetrie2D` layout: 240 vertices projected to 2D
+ * with ring classification (8 visual clusters via k-means on 48 distinct
+ * radii). This is the fixed-`PETRIE_BASIS` projection, NOT the exact 8×30
+ * Coxeter mandala — for that use `projectAllCoxeterPlane2D` +
+ * `classifyCoxeterShells` (`e8-coxeter-plane.ts`).
  *
  * Returns vertices sorted by ring (innermost first) then by angle.
  */

@@ -23,7 +23,8 @@
 		"dev": "tsup --watch",
 		"typecheck": "tsc --noEmit",
 		"test": "vitest run",
-		"clean": "rm -rf dist"
+		"clean": "rm -rf dist",
+		"gallery": "tsx scripts/generate-gallery.ts"
 	},
 	"keywords": [
 		"e8",
@@ -34,14 +35,23 @@
 		"lattice",
 		"geometry",
 		"coxeter",
-		"projection"
+		"projection",
+		"root-system",
+		"exceptional-lie-group",
+		"e8-lattice",
+		"stereographic-projection"
 	],
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/fxyz-network/fxyz-e8.git"
+		"url": "git+https://github.com/fxyznetwork/fxyz-e8.git"
+	},
+	"homepage": "https://github.com/fxyznetwork/fxyz-e8#readme",
+	"bugs": {
+		"url": "https://github.com/fxyznetwork/fxyz-e8/issues"
 	},
 	"devDependencies": {
 		"tsup": "^8.5.1",
+		"tsx": "^4.19.2",
 		"typescript": "^5.7.3",
 		"vitest": "^4.1.10"
 	}

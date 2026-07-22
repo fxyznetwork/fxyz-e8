@@ -68,7 +68,7 @@ export const MOXNESS_BASIS = {
 } as const;
 
 // ---------------------------------------------------------------------------
-// Petrie Projection (Coxeter plane)
+// E8 Coxeter data (simple roots, exponents) + a legacy fixed 2D basis
 // ---------------------------------------------------------------------------
 
 /**
@@ -76,27 +76,55 @@ export const MOXNESS_BASIS = {
  * is the Coxeter number. These are the degrees minus 1 of the Casimir
  * invariants of E8, and they sum to |W|/h = 120.
  *
- * The Petrie projection uses eigenvectors of the Coxeter element
- * with eigenvalues exp(2πi·m_k/h), giving the correct 30-fold
- * symmetric mandala with 8 concentric rings of 30 vertices each.
+ * The Coxeter element's eigenvalues are exp(2πi·m_k/h) for these exponents.
+ * The genuine Coxeter-plane ("mandala") projection uses the exp(±2πi/30)
+ * eigenplane — see `projectCoxeterPlane2D` / `COXETER_PLANE_BASIS` in
+ * `e8-coxeter-plane.ts`, which derives that plane and test-locks the resulting
+ * 30-fold symmetry (8 concentric shells of 30 roots each).
  */
 export const E8_COXETER_EXPONENTS = [1, 7, 11, 13, 17, 19, 23, 29] as const;
 
 /**
- * Van Oss / Petrie projection basis: maps 8D E8 roots onto the Coxeter eigenplane.
+ * The 8 E8 simple roots in the standard (Bourbaki) even-coordinate convention.
  *
- * These are the orthonormal eigenvectors of the E8 Coxeter element C for the
- * m=1 eigenvalue exp(2πi/30), computed by solving (C² - 2cos(2π/30)C + I)v = 0
- * with Gram-Schmidt orthogonalization.
+ * Row 0 is the "half-integer" root ½(e₁−e₂−e₃−e₄−e₅−e₆−e₇+e₈); the other seven
+ * are ±eᵢ±eⱼ integer roots. Verifiable facts (asserted in
+ * `__tests__/e8-coxeter-plane.test.ts`): each has norm² = 2, each is a member
+ * of the 240-root system from `generateE8RootSystem()`, and their Gram matrix
+ * is the E8 Cartan matrix (diagonal 2, off-diagonal 0/−1 with E8 connectivity).
  *
- * The Coxeter element C = s₁·s₂·...·s₈ (product of simple reflections in
- * bipartite order [0,2,4,6,1,3,5,7]) satisfies C³⁰ = I with max error 0.
- * These eigenvectors satisfy C·u1 = cos(2π/30)·u1 - sin(2π/30)·u2 exactly
- * (residual 4e-16).
+ * These are the reflections composed to form the Coxeter element in
+ * `e8-coxeter-plane.ts`.
+ */
+export const E8_SIMPLE_ROOTS = [
+	[0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, 0.5],
+	[1, 1, 0, 0, 0, 0, 0, 0],
+	[-1, 1, 0, 0, 0, 0, 0, 0],
+	[0, -1, 1, 0, 0, 0, 0, 0],
+	[0, 0, -1, 1, 0, 0, 0, 0],
+	[0, 0, 0, -1, 1, 0, 0, 0],
+	[0, 0, 0, 0, -1, 1, 0, 0],
+	[0, 0, 0, 0, 0, -1, 1, 0],
+] as const;
+
+/**
+ * A fixed orthonormal 2D projection basis, retained under its historical name
+ * for back-compat with `projectPetrie2D`.
  *
- * The projection produces 48 distinct radii (not 8 equal rings of 30).
- * This is the mathematically correct Petrie/Coxeter plane projection,
- * grouped visually into 8 clusters via k-means for rendering.
+ * IMPORTANT — this is NOT the Coxeter eigenplane. An earlier version of this
+ * comment claimed u1/u2 were the exp(2πi/30) eigenvectors of the E8 Coxeter
+ * element (which would make the projected root system 30-fold symmetric, with a
+ * precise "residual 4e-16" figure). That claim was not reproducible: rotating
+ * the 240 projected points by 2π/n for n = 2..60 matches the point set only at
+ * n = 2 — the trivial centrosymmetry (v ↦ −v) any linear projection of E8
+ * inherits for free — and never at 30 or 8. u1 and u2 ARE a genuine orthonormal
+ * pair (‖u‖ = 1, u1·u2 ≈ 0) and the projection produces 48 distinct radii, but
+ * it does not deliver the Coxeter-plane symmetry.
+ *
+ * For the real, verified E8 mandala (exact 30-fold, 8 shells × 30) use
+ * `projectCoxeterPlane2D` / `COXETER_PLANE_BASIS` in `e8-coxeter-plane.ts`,
+ * which derives the Coxeter plane from first principles and locks it with a
+ * test.
  */
 export const PETRIE_BASIS = {
 	u1: [

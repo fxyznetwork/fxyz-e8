@@ -1,5 +1,6 @@
 export * from "./e8-3d-fold-projection";
 export * from "./e8-constants";
+export * from "./e8-coxeter-plane";
 export * from "./e8-edge-norms";
 export * from "./e8-fold-morph";
 export * from "./e8-geometry";

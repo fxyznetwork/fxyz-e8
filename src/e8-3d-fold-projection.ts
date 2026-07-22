@@ -77,9 +77,8 @@ export function foldE8ToH4L(
  * {4, 24, 24, 30, 30, 40, 40, 48} as the EXACT distinct-radii distribution
  * (no k-means tolerance required); see `e8-3d-fold-projection.test.ts`.
  *
- * Replaces `projectTo3D` (legacy MOXNESS_BASIS-based) for Beat 8 / `moxness`
- * scene state. The legacy function remains exported for parity testing
- * during the migration window.
+ * Replaces the legacy MOXNESS_BASIS-based projectTo3D. The legacy function
+ * remains exported for parity testing.
  */
 export function projectTo3DViaFold(
 	vertices8D: readonly (readonly number[])[],

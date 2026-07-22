@@ -5,8 +5,9 @@
  * A lerp between two MATHEMATICALLY GROUNDED canonical projections of the
  * SAME 240 E8 root vectors:
  *
- *   t=0  → (Petrie_x, Petrie_y, 0)            — Stembridge canonical 2D
- *                                                Coxeter-eigenplane mandala,
+ *   t=0  → (mandala_x, mandala_y, 0)          — the E8 Coxeter-plane mandala
+ *                                                (projectCoxeterPlane2D, the
+ *                                                verified 30-fold projection),
  *                                                embedded as a flat z=0 disk
  *   t=1  → (folded[1], folded[2], folded[3])  — Moxness 2019 canonical 3D
  *                                                via H4_UNI rows 0-3 + drop
@@ -18,8 +19,8 @@
  * 3D and the 8 Petrie rings physically separate into the canonical
  * 8-shell radial multiset {4, 24, 24, 30, 30, 40, 40, 48}.
  *
- * Both endpoints come from existing tested math — `projectPetrie2D`
- * (e8-projections.ts) and `projectTo3DViaFold` (e8-3d-fold-projection.ts)
+ * Both endpoints come from existing tested math — `projectCoxeterPlane2D`
+ * (e8-coxeter-plane.ts) and `projectTo3DViaFold` (e8-3d-fold-projection.ts)
  * — so this module adds zero new math claims. It just provides the GPU
  * shader two pre-baked attribute arrays so the morph runs as
  * `mix(posPetrie, posFold, uFoldT)` in the vertex shader, no per-frame
@@ -37,16 +38,16 @@
  */
 
 import { projectTo3DViaFold } from "./e8-3d-fold-projection";
+import { projectCoxeterPlane2D } from "./e8-coxeter-plane";
 import { generateE8RootSystem } from "./e8-geometry";
-import { projectPetrie2D } from "./e8-projections";
 
 const E8_VERTEX_COUNT = 240;
 
 export interface E8FoldMorphEndpoints {
 	/** Flat Float64Array, 240*3 length. Index 3i..3i+2 = [x, y, z=0] for
-	 *  E8 root i in the canonical Petrie 2D projection. Float64 preserves
-	 *  the canonical-math precision; convert via `toFloat32` at the GPU
-	 *  attribute boundary. */
+	 *  E8 root i in the canonical Coxeter-plane 2D projection (the verified
+	 *  30-fold mandala). Float64 preserves the canonical-math precision;
+	 *  convert via `toFloat32` at the GPU attribute boundary. */
 	posPetrie3D: Float64Array;
 	/** Flat Float64Array, 240*3 length. Index 3i..3i+2 = (folded[1],
 	 *  folded[2], folded[3]) for E8 root i — the canonical Moxness 3D
@@ -77,7 +78,7 @@ export function getE8FoldMorphEndpoints(): E8FoldMorphEndpoints {
 	const fold3D = projectTo3DViaFold(roots);
 
 	for (let i = 0; i < E8_VERTEX_COUNT; i++) {
-		const [px, py] = projectPetrie2D(roots[i]);
+		const [px, py] = projectCoxeterPlane2D(roots[i]);
 		const [fx, fy, fz] = fold3D[i];
 		const o = i * 3;
 		posPetrie3D[o + 0] = px;

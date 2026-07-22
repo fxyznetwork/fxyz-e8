@@ -1,6 +1,6 @@
 # Contributing
 
-Thanks for your interest in improving these packages.
+Thanks for your interest in improving this package.
 
 ## Ground rules
 
@@ -21,18 +21,18 @@ Thanks for your interest in improving these packages.
 
 1. Fork and branch from `main`.
 2. Keep changes focused — one concern per PR.
-3. Match the surrounding code style. Formatting and linting use **Biome**
-   (`pnpm biome check --write`).
+3. Match the existing code style.
 4. Add or update tests for behavior changes.
-5. Make sure `pnpm build`, `pnpm test`, and typecheck pass.
+5. Make sure `pnpm build`, `pnpm test`, and `pnpm typecheck` pass.
 6. Write a clear PR description: what changed and why.
 
 ## Local development
 
 ```sh
 pnpm install
-pnpm build          # build all packages
-pnpm test           # run the test suites
+pnpm build          # tsup — emits dist/ (ESM + CJS + .d.ts)
+pnpm test           # vitest
+pnpm typecheck      # tsc --noEmit
 ```
 
 ## Commit sign-off
