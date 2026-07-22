@@ -1,0 +1,48 @@
+{
+	"name": "@fxyz/e8",
+	"version": "0.1.0",
+	"description": "E8/H4 polytope geometry and projection toolkit: 240-root E8 lattice generation, Petrie and Moxness projections, H4 600-cell folding and stereographic projection, and platonic-hull extraction.",
+	"license": "Apache-2.0",
+	"type": "module",
+	"main": "./dist/index.cjs",
+	"module": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"files": [
+		"dist/**"
+	],
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.js",
+			"require": "./dist/index.cjs"
+		}
+	},
+	"sideEffects": false,
+	"scripts": {
+		"build": "tsup",
+		"dev": "tsup --watch",
+		"typecheck": "tsc --noEmit",
+		"test": "vitest run",
+		"clean": "rm -rf dist"
+	},
+	"keywords": [
+		"e8",
+		"h4",
+		"lie-algebra",
+		"polytope",
+		"600-cell",
+		"lattice",
+		"geometry",
+		"coxeter",
+		"projection"
+	],
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/fxyz-network/fxyz-e8.git"
+	},
+	"devDependencies": {
+		"tsup": "^8.5.1",
+		"typescript": "^5.7.3",
+		"vitest": "^4.1.10"
+	}
+}
