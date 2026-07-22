@@ -1,5 +1,7 @@
 # @fxyz/e8
 
+[![CI](https://github.com/fxyznetwork/fxyz-e8/actions/workflows/ci.yml/badge.svg)](https://github.com/fxyznetwork/fxyz-e8/actions/workflows/ci.yml)
+
 A pure-math TypeScript toolkit for the E8 root system and its H4 (600-cell)
 sub-structure: root-system generation, multiple 2D/3D projections, hull
 extraction, and folding between E8 and H4. Zero runtime dependencies, zero
