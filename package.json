@@ -1,6 +1,9 @@
 {
 	"name": "@fxyz/e8",
 	"version": "0.1.0",
+	"publishConfig": {
+		"access": "public"
+	},
 	"description": "E8/H4 polytope geometry and projection toolkit: 240-root E8 lattice generation, Petrie and Moxness projections, H4 600-cell folding and stereographic projection, and platonic-hull extraction.",
 	"license": "Apache-2.0",
 	"type": "module",
